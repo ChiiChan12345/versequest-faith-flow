@@ -1,16 +1,31 @@
 
 import { useState } from 'react';
-import { CheckCircle, Circle, Clock, Calendar, Flame, PlusCircle } from 'lucide-react';
+import { CheckCircle, Circle, Clock, Calendar, Flame, PlusCircle, Trophy, Star, Gift } from 'lucide-react';
 import { sampleQuests, userProgress, type Quest } from '@/data/questData';
+import { WeeklyQuestChallenge } from '@/components/WeeklyQuestChallenge';
+import { SeasonalQuest } from '@/components/SeasonalQuest';
+import { QuestCompletionCelebration } from '@/components/QuestCompletionCelebration';
+import { QuestCalendarView } from '@/components/QuestCalendarView';
+
+type QuestSubTab = 'today' | 'weekly' | 'seasonal';
 
 export const QuestsTab = () => {
   const [quests, setQuests] = useState(sampleQuests);
   const [selectedDifficulty, setSelectedDifficulty] = useState<'gentle' | 'challenge' | 'bold' | null>(null);
+  const [activeSubTab, setActiveSubTab] = useState<QuestSubTab>('today');
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const toggleQuestComplete = (questId: number) => {
     setQuests(prev => prev.map(quest => 
       quest.id === questId ? { ...quest, completed: !quest.completed } : quest
     ));
+    
+    // Show celebration for completed quest
+    const quest = quests.find(q => q.id === questId);
+    if (quest && !quest.completed) {
+      setShowCelebration(true);
+      setTimeout(() => setShowCelebration(false), 3000);
+    }
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -35,8 +50,112 @@ export const QuestsTab = () => {
     ? quests.filter(quest => quest.difficulty === selectedDifficulty)
     : quests;
 
+  const getSubTabButtonClass = (tab: QuestSubTab) => {
+    const baseClass = "px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 hover:scale-105";
+    return activeSubTab === tab 
+      ? `${baseClass} bg-slate-800 text-white shadow-md`
+      : `${baseClass} bg-slate-100 text-slate-600 hover:bg-slate-200`;
+  };
+
+  const renderSubTabContent = () => {
+    switch (activeSubTab) {
+      case 'today':
+        return (
+          <>
+            {/* Difficulty Filter */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-800 flex items-center text-lg">
+                <span className="text-xl mr-2">🎯</span>
+                Choose Your Path
+              </h3>
+              <div className="grid grid-cols-3 gap-3">
+                {(['gentle', 'challenge', 'bold'] as const).map(difficulty => (
+                  <button
+                    key={difficulty}
+                    onClick={() => setSelectedDifficulty(selectedDifficulty === difficulty ? null : difficulty)}
+                    className={`p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 gentle-hover ${
+                      selectedDifficulty === difficulty 
+                        ? getDifficultyColor(difficulty) 
+                        : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md'
+                    }`}
+                  >
+                    <p className="text-sm font-semibold">{getDifficultyLabel(difficulty)}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Today's Quest List */}
+            <div className="space-y-4">
+              {selectedDifficulty && (
+                <button 
+                  onClick={() => setSelectedDifficulty(null)}
+                  className="text-sm text-blue-600 hover:text-blue-700 underline transition-colors"
+                >
+                  Show All
+                </button>
+              )}
+              
+              {filteredQuests.map((quest, index) => (
+                <div 
+                  key={quest.id} 
+                  className="bg-white rounded-2xl p-5 shadow-md border border-slate-100 quest-card animate-gentle-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="flex items-start space-x-4">
+                    <button 
+                      onClick={() => toggleQuestComplete(quest.id)}
+                      className="mt-1 transition-all duration-300 transform hover:scale-110"
+                    >
+                      {quest.completed ? (
+                        <CheckCircle className="w-7 h-7 text-emerald-500 animate-gentle-bounce" />
+                      ) : (
+                        <Circle className="w-7 h-7 text-slate-400 hover:text-slate-600" />
+                      )}
+                    </button>
+                    
+                    <div className="flex-1 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className={`font-semibold text-lg ${quest.completed ? 'line-through text-slate-500' : 'text-slate-800'}`}>
+                          {quest.title}
+                        </h4>
+                        <span className={`text-xs px-3 py-1 rounded-full border font-medium ${getDifficultyColor(quest.difficulty)}`}>
+                          {getDifficultyLabel(quest.difficulty)}
+                        </span>
+                      </div>
+                      
+                      <p className={`text-base leading-relaxed ${quest.completed ? 'text-slate-500' : 'text-slate-700'}`}>
+                        {quest.description}
+                      </p>
+                      
+                      <div className="flex items-center text-sm text-slate-500 bg-slate-50 px-3 py-2 rounded-lg w-fit">
+                        <Clock className="w-4 h-4 mr-2 text-slate-400" />
+                        {quest.estimatedTime}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        );
+      
+      case 'weekly':
+        return <WeeklyQuestChallenge />;
+      
+      case 'seasonal':
+        return <SeasonalQuest />;
+      
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="p-4 space-y-6 animate-gentle-fade-in">
+      {/* Quest Completion Celebration */}
+      {showCelebration && <QuestCompletionCelebration />}
+
       {/* Progress Stats */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl p-4 text-center shadow-lg text-white transform transition-all duration-300 hover:scale-105">
@@ -76,87 +195,43 @@ export const QuestsTab = () => {
         <p className="text-sm opacity-90 text-blue-200">1 Thessalonians 5:11</p>
       </div>
 
-      {/* Difficulty Filter */}
-      <div className="space-y-4">
-        <h3 className="font-semibold text-slate-800 flex items-center text-lg">
-          <span className="text-xl mr-2">🎯</span>
-          Choose Your Path
-        </h3>
-        <div className="grid grid-cols-3 gap-3">
-          {(['gentle', 'challenge', 'bold'] as const).map(difficulty => (
-            <button
-              key={difficulty}
-              onClick={() => setSelectedDifficulty(selectedDifficulty === difficulty ? null : difficulty)}
-              className={`p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 gentle-hover ${
-                selectedDifficulty === difficulty 
-                  ? getDifficultyColor(difficulty) 
-                  : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md'
-              }`}
-            >
-              <p className="text-sm font-semibold">{getDifficultyLabel(difficulty)}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Quest List */}
+      {/* Quest Sub-Tabs */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-slate-800 flex items-center text-lg">
             <span className="text-xl mr-2">📋</span>
-            Today's Quests
+            Quests
           </h3>
-          {selectedDifficulty && (
-            <button 
-              onClick={() => setSelectedDifficulty(null)}
-              className="text-sm text-blue-600 hover:text-blue-700 underline transition-colors"
-            >
-              Show All
-            </button>
-          )}
         </div>
         
-        {filteredQuests.map((quest, index) => (
-          <div 
-            key={quest.id} 
-            className="bg-white rounded-2xl p-5 shadow-md border border-slate-100 quest-card animate-gentle-fade-in"
-            style={{ animationDelay: `${index * 100}ms` }}
+        {/* Sub-Tab Navigation */}
+        <div className="flex space-x-2 bg-slate-50 p-1 rounded-lg">
+          <button
+            onClick={() => setActiveSubTab('today')}
+            className={getSubTabButtonClass('today')}
           >
-            <div className="flex items-start space-x-4">
-              <button 
-                onClick={() => toggleQuestComplete(quest.id)}
-                className="mt-1 transition-all duration-300 transform hover:scale-110"
-              >
-                {quest.completed ? (
-                  <CheckCircle className="w-7 h-7 text-emerald-500 animate-gentle-bounce" />
-                ) : (
-                  <Circle className="w-7 h-7 text-slate-400 hover:text-slate-600" />
-                )}
-              </button>
-              
-              <div className="flex-1 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className={`font-semibold text-lg ${quest.completed ? 'line-through text-slate-500' : 'text-slate-800'}`}>
-                    {quest.title}
-                  </h4>
-                  <span className={`text-xs px-3 py-1 rounded-full border font-medium ${getDifficultyColor(quest.difficulty)}`}>
-                    {getDifficultyLabel(quest.difficulty)}
-                  </span>
-                </div>
-                
-                <p className={`text-base leading-relaxed ${quest.completed ? 'text-slate-500' : 'text-slate-700'}`}>
-                  {quest.description}
-                </p>
-                
-                <div className="flex items-center text-sm text-slate-500 bg-slate-50 px-3 py-2 rounded-lg w-fit">
-                  <Clock className="w-4 h-4 mr-2 text-slate-400" />
-                  {quest.estimatedTime}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+            Today
+          </button>
+          <button
+            onClick={() => setActiveSubTab('weekly')}
+            className={getSubTabButtonClass('weekly')}
+          >
+            Weekly
+          </button>
+          <button
+            onClick={() => setActiveSubTab('seasonal')}
+            className={getSubTabButtonClass('seasonal')}
+          >
+            Seasonal
+          </button>
+        </div>
+
+        {/* Sub-Tab Content */}
+        {renderSubTabContent()}
       </div>
+
+      {/* Calendar View */}
+      <QuestCalendarView />
 
       {/* Floating Action Button */}
       <button className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 gentle-hover">
