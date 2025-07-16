@@ -60,11 +60,11 @@ export const BibleTab = () => {
   ];
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="p-4 space-y-6 animate-gentle-fade-in">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-2xl p-6 text-white shadow-lg">
+      <div className="bg-gradient-to-br from-amber-400 via-orange-400 to-red-500 rounded-2xl p-6 text-white shadow-xl animate-soft-scale-in">
         <h1 className="text-2xl font-bold mb-2 flex items-center">
-          <span className="text-3xl mr-2">📖</span>
+          <span className="text-3xl mr-3">📖</span>
           Holy Bible
         </h1>
         <p className="text-sm opacity-90">Study God's Word with purpose</p>
@@ -76,23 +76,23 @@ export const BibleTab = () => {
           <select 
             value={selectedTranslation}
             onChange={(e) => setSelectedTranslation(e.target.value)}
-            className="w-full p-3 bg-white border-2 border-blue-200 rounded-lg appearance-none text-gray-800 font-medium shadow-sm focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+            className="w-full p-4 bg-white border-2 border-blue-200 rounded-xl appearance-none text-slate-800 font-medium shadow-sm focus:border-blue-400 focus:ring-2 focus:ring-blue-200 transition-all duration-300 hover:shadow-md"
           >
             {translations.map(translation => (
               <option key={translation} value={translation}>{translation}</option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-500" />
+          <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-500" />
         </div>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
           <input
             type="text"
             placeholder="Search verses or references..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-white border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm"
+            className="w-full pl-12 pr-4 py-4 bg-white border-2 border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition-all duration-300 hover:shadow-md"
           />
         </div>
       </div>
@@ -100,72 +100,72 @@ export const BibleTab = () => {
       {/* Book and Chapter Selection */}
       <div className="grid grid-cols-2 gap-4">
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Book</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-2">Book</label>
           <select 
             value={currentBook}
             onChange={(e) => {
               setCurrentBook(e.target.value);
-              setCurrentChapter(1); // Reset to chapter 1 when book changes
+              setCurrentChapter(1);
             }}
-            className="w-full p-3 bg-white border-2 border-purple-200 rounded-lg appearance-none text-gray-800 font-medium shadow-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200"
+            className="w-full p-4 bg-white border-2 border-purple-200 rounded-xl appearance-none text-slate-800 font-medium shadow-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 transition-all duration-300 hover:shadow-md"
           >
             {books.map(book => (
               <option key={book} value={book}>{book}</option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3 bottom-3 w-5 h-5 text-purple-500" />
+          <ChevronDown className="absolute right-4 bottom-4 w-5 h-5 text-purple-500" />
         </div>
 
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Chapter</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-2">Chapter</label>
           <select 
             value={currentChapter}
             onChange={(e) => setCurrentChapter(Number(e.target.value))}
-            className="w-full p-3 bg-white border-2 border-purple-200 rounded-lg appearance-none text-gray-800 font-medium shadow-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200"
+            className="w-full p-4 bg-white border-2 border-purple-200 rounded-xl appearance-none text-slate-800 font-medium shadow-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 transition-all duration-300 hover:shadow-md"
           >
             {chapters.map(chapter => (
               <option key={chapter} value={chapter}>{chapter}</option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3 bottom-3 w-5 h-5 text-purple-500" />
+          <ChevronDown className="absolute right-4 bottom-4 w-5 h-5 text-purple-500" />
         </div>
       </div>
 
       {/* Navigation Breadcrumb */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 shadow-sm border-2 border-blue-100">
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-5 shadow-sm border-2 border-blue-100 animate-soft-scale-in">
         <div className="flex items-center text-sm text-blue-700 mb-2">
-          <BookOpen className="w-4 h-4 mr-2" />
-          <span>{currentBook} • Chapter {currentChapter}</span>
+          <BookOpen className="w-5 h-5 mr-2" />
+          <span className="font-medium">{currentBook} • Chapter {currentChapter}</span>
         </div>
-        <h2 className="text-lg font-bold text-gray-800">{currentBook} {currentChapter}</h2>
-        <p className="text-xs text-gray-600 mt-1">
-          Note: Chapter navigation functionality will be added in backend integration
+        <h2 className="text-xl font-bold text-slate-800">{currentBook} {currentChapter}</h2>
+        <p className="text-xs text-slate-600 mt-2 bg-amber-50 px-3 py-1 rounded-lg inline-block">
+          📝 Chapter navigation functionality will be added in backend integration
         </p>
       </div>
 
       {/* Bible Content */}
-      <div className="bg-white rounded-xl p-6 shadow-lg border-2 border-gray-100">
-        <div className="space-y-4">
-          {sampleVerses.map(verseData => (
-            <div key={verseData.verse} className="group">
-              <div className="flex items-start space-x-3">
-                <span className="text-sm font-bold text-amber-600 mt-1 min-w-[24px] bg-amber-50 px-2 py-1 rounded-full">
+      <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-slate-100">
+        <div className="space-y-6">
+          {sampleVerses.map((verseData, index) => (
+            <div key={verseData.verse} className="group animate-gentle-fade-in" style={{ animationDelay: `${index * 150}ms` }}>
+              <div className="flex items-start space-x-4">
+                <span className="text-sm font-bold text-amber-600 mt-1 min-w-[32px] bg-amber-50 px-3 py-2 rounded-full border border-amber-200">
                   {verseData.verse}
                 </span>
-                <p className="text-gray-800 leading-relaxed font-serif text-base flex-1">
+                <p className="text-slate-800 leading-relaxed font-serif text-lg flex-1">
                   {verseData.text}
                 </p>
               </div>
               
               {/* Verse Actions */}
-              <div className="flex items-center space-x-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity pl-9">
-                <button className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 rounded-full text-xs hover:from-blue-100 hover:to-purple-100 transition-colors border border-blue-200">
-                  <Sparkles className="w-3 h-3" />
-                  <span>Generate Quest</span>
+              <div className="flex items-center space-x-3 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pl-12">
+                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 rounded-full text-sm hover:from-blue-100 hover:to-purple-100 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md transform hover:scale-105">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="font-medium">Generate Quest</span>
                 </button>
-                <button className="flex items-center space-x-1 px-3 py-1 bg-gray-50 text-gray-600 rounded-full text-xs hover:bg-gray-100 transition-colors border border-gray-200">
-                  <Share2 className="w-3 h-3" />
-                  <span>Share</span>
+                <button className="flex items-center space-x-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-full text-sm hover:bg-slate-100 transition-all duration-300 border border-slate-200 shadow-sm hover:shadow-md transform hover:scale-105">
+                  <Share2 className="w-4 h-4" />
+                  <span className="font-medium">Share</span>
                 </button>
               </div>
             </div>
@@ -175,16 +175,16 @@ export const BibleTab = () => {
 
       {/* Chapter Navigation */}
       <div className="flex justify-between items-center">
-        <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors shadow-md">
-          <span className="text-sm font-medium">← Previous</span>
+        <button className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+          <span className="text-sm font-semibold">← Previous</span>
         </button>
         
-        <div className="text-sm text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
+        <div className="text-sm text-slate-500 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
           Chapter {currentChapter}
         </div>
         
-        <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors shadow-md">
-          <span className="text-sm font-medium">Next →</span>
+        <button className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+          <span className="text-sm font-semibold">Next →</span>
         </button>
       </div>
     </div>

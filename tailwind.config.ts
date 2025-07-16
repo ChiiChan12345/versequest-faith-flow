@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -84,11 +85,69 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'gentle-fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(8px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'soft-scale-in': {
+					'0%': {
+						transform: 'scale(0.95)',
+						opacity: '0'
+					},
+					'100%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					}
+				},
+				'check-draw': {
+					'0%': {
+						strokeDasharray: '0 100'
+					},
+					'100%': {
+						strokeDasharray: '100 0'
+					}
+				},
+				'gentle-bounce': {
+					'0%, 100%': {
+						transform: 'scale(1)'
+					},
+					'50%': {
+						transform: 'scale(1.05)'
+					}
+				},
+				'soft-pulse': {
+					'0%, 100%': {
+						opacity: '1'
+					},
+					'50%': {
+						opacity: '0.8'
+					}
+				},
+				'progress-fill': {
+					'0%': {
+						transform: 'scaleX(0)'
+					},
+					'100%': {
+						transform: 'scaleX(1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'gentle-fade-in': 'gentle-fade-in 0.4s ease-out',
+				'soft-scale-in': 'soft-scale-in 0.3s ease-out',
+				'check-draw': 'check-draw 0.6s ease-out',
+				'gentle-bounce': 'gentle-bounce 0.4s ease-out',
+				'soft-pulse': 'soft-pulse 2s ease-in-out infinite',
+				'progress-fill': 'progress-fill 0.8s ease-out'
 			}
 		}
 	},
