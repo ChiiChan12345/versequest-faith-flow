@@ -144,9 +144,6 @@ export const QuestsTab = () => {
                   </span>
                 </div>
                 
-                <p className="text-sm text-blue-700 font-serif italic bg-blue-50 p-3 rounded-lg border-l-4 border-blue-300">
-                  "{quest.verse}"
-                </p>
                 <p className={`text-base leading-relaxed ${quest.completed ? 'text-slate-500' : 'text-slate-700'}`}>
                   {quest.description}
                 </p>
