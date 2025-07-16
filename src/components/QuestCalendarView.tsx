@@ -88,24 +88,24 @@ export const QuestCalendarView = () => {
 
   return (
     <div className="space-y-4">
-      <h3 className="font-semibold text-slate-800 flex items-center text-lg">
+      <h3 className="font-semibold text-slate-800 flex items-center justify-center text-lg">
         <span className="text-xl mr-2">📅</span>
         Your Spiritual Journey
       </h3>
       
       {/* Legend */}
       <div className="bg-white rounded-xl p-4 shadow-md border border-slate-100">
-        <h4 className="font-medium text-slate-700 mb-3">Activity Legend</h4>
+        <h4 className="font-medium text-slate-700 mb-3 text-center">Activity Legend</h4>
         <div className="grid grid-cols-3 gap-3 text-sm">
-          <div className="flex items-center">
+          <div className="flex items-center justify-center">
             <div className="w-3 h-3 bg-emerald-500 rounded-full mr-2"></div>
             <span className="text-slate-600">Daily Quest</span>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-center">
             <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
             <span className="text-slate-600">Journal Entry</span>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-center">
             <div className="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
             <span className="text-slate-600">Community</span>
           </div>
@@ -113,12 +113,13 @@ export const QuestCalendarView = () => {
       </div>
       
       {/* Calendar */}
-      <div className="bg-white rounded-xl p-4 shadow-md border border-slate-100">
+      <div className="bg-white rounded-xl p-4 shadow-md border border-slate-100 flex justify-center">
         <Calendar
           mode="single"
           selected={selectedDate}
           onSelect={setSelectedDate}
-          className="w-full"
+          showOutsideDays={false}
+          className="mx-auto"
           components={{
             Day: ({ date }) => renderDayContent(date)
           }}
