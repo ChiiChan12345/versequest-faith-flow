@@ -51,10 +51,10 @@ export const QuestsTab = () => {
     : quests;
 
   const getSubTabButtonClass = (tab: QuestSubTab) => {
-    const baseClass = "px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 hover:scale-105";
+    const baseClass = "flex-1 py-3 px-4 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 border-2";
     return activeSubTab === tab 
-      ? `${baseClass} bg-slate-800 text-white shadow-md`
-      : `${baseClass} bg-slate-100 text-slate-600 hover:bg-slate-200`;
+      ? `${baseClass} bg-slate-800 text-white border-slate-800 shadow-lg`
+      : `${baseClass} bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-sm`;
   };
 
   const renderSubTabContent = () => {
@@ -137,6 +137,13 @@ export const QuestsTab = () => {
                 </div>
               ))}
             </div>
+
+            {/* Calendar View - Only in Today tab */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-md">
+                <QuestCalendarView />
+              </div>
+            </div>
           </>
         );
       
@@ -204,8 +211,8 @@ export const QuestsTab = () => {
           </h3>
         </div>
         
-        {/* Sub-Tab Navigation */}
-        <div className="flex space-x-2 bg-slate-50 p-1 rounded-lg">
+        {/* Sub-Tab Navigation - Full Width */}
+        <div className="flex space-x-3">
           <button
             onClick={() => setActiveSubTab('today')}
             className={getSubTabButtonClass('today')}
@@ -229,9 +236,6 @@ export const QuestsTab = () => {
         {/* Sub-Tab Content */}
         {renderSubTabContent()}
       </div>
-
-      {/* Calendar View */}
-      <QuestCalendarView />
 
       {/* Floating Action Button */}
       <button className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 gentle-hover">
