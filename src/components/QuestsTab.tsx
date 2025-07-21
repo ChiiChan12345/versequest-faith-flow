@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CheckCircle, Circle, Clock, Calendar, Flame, PlusCircle, Trophy, Star, Gift, RotateCcw } from 'lucide-react';
 import { sampleQuests, userProgress, type Quest } from '@/data/questData';
@@ -285,14 +284,9 @@ export const QuestsTab = () => {
 
       {/* Calendar View - Only show when card is NOT flipped */}
       {!isCardFlipped && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-slate-800 text-center">
-            Your Spiritual Journey
-          </h3>
-          <div className="flex justify-center">
-            <div className="w-full max-w-md">
-              <QuestCalendarView />
-            </div>
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            <QuestCalendarView />
           </div>
         </div>
       )}
