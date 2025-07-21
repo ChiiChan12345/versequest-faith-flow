@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { CheckCircle, Circle, Clock, Calendar, Flame, PlusCircle, Trophy, Star, Gift } from 'lucide-react';
+import { CheckCircle, Circle, Clock, Calendar, Flame, PlusCircle, Trophy, Star, Gift, RotateCcw } from 'lucide-react';
 import { sampleQuests, userProgress, type Quest } from '@/data/questData';
 import { WeeklyQuestChallenge } from '@/components/WeeklyQuestChallenge';
 import { SeasonalQuest } from '@/components/SeasonalQuest';
@@ -14,6 +14,7 @@ export const QuestsTab = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<'gentle' | 'challenge' | 'bold' | null>(null);
   const [activeSubTab, setActiveSubTab] = useState<QuestSubTab>('today');
   const [showCelebration, setShowCelebration] = useState(false);
+  const [isCardFlipped, setIsCardFlipped] = useState(false);
 
   const toggleQuestComplete = (questId: number) => {
     setQuests(prev => prev.map(quest => 
@@ -57,11 +58,15 @@ export const QuestsTab = () => {
       : `${baseClass} bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-sm`;
   };
 
-  const renderSubTabContent = () => {
+  const handleCardFlip = () => {
+    setIsCardFlipped(!isCardFlipped);
+  };
+
+  const renderQuestContent = () => {
     switch (activeSubTab) {
       case 'today':
         return (
-          <>
+          <div className="space-y-6">
             {/* Difficulty Filter */}
             <div className="space-y-4">
               <h3 className="font-semibold text-slate-800 flex items-center text-lg">
@@ -137,14 +142,7 @@ export const QuestsTab = () => {
                 </div>
               ))}
             </div>
-
-            {/* Calendar View - Only in Today tab */}
-            <div className="flex justify-center">
-              <div className="w-full max-w-md">
-                <QuestCalendarView />
-              </div>
-            </div>
-          </>
+          </div>
         );
       
       case 'weekly':
@@ -190,52 +188,95 @@ export const QuestsTab = () => {
         </div>
       </div>
 
-      {/* Daily Verse Section */}
-      <div className="bg-gradient-to-br from-slate-700 via-blue-700 to-indigo-800 rounded-2xl p-6 text-white shadow-xl animate-soft-scale-in">
-        <h2 className="text-lg font-semibold mb-3 flex items-center">
-          <span className="text-2xl mr-2">✨</span>
-          Today's Verse
-        </h2>
-        <p className="text-base leading-relaxed font-serif mb-3 text-blue-50">
-          "Therefore encourage one another and build each other up, just as in fact you are doing."
-        </p>
-        <p className="text-sm opacity-90 text-blue-200">1 Thessalonians 5:11</p>
+      {/* Main Flip Card */}
+      <div className="relative h-[600px] perspective-1000">
+        <div 
+          className={`absolute inset-0 w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
+            isCardFlipped ? 'rotate-y-180' : ''
+          }`}
+        >
+          {/* Front Side - Today's Verse */}
+          <div className="absolute inset-0 w-full h-full backface-hidden">
+            <div 
+              className="bg-gradient-to-br from-slate-700 via-blue-700 to-indigo-800 rounded-2xl p-8 text-white shadow-xl h-full flex flex-col justify-center items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+              onClick={handleCardFlip}
+            >
+              <div className="text-center space-y-6">
+                <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
+                  <span className="text-3xl mr-3">✨</span>
+                  Today's Verse
+                </h2>
+                <p className="text-xl leading-relaxed font-serif mb-6 text-blue-50 max-w-md">
+                  "Therefore encourage one another and build each other up, just as in fact you are doing."
+                </p>
+                <p className="text-lg opacity-90 text-blue-200 mb-8">1 Thessalonians 5:11</p>
+                
+                <div className="flex items-center justify-center text-blue-200 animate-soft-pulse">
+                  <RotateCcw className="w-5 h-5 mr-2" />
+                  <span className="text-sm">Tap to view quests</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Back Side - Quests */}
+          <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
+            <div className="bg-white rounded-2xl shadow-xl h-full overflow-hidden">
+              {/* Header with flip button */}
+              <div className="bg-gradient-to-r from-slate-700 to-blue-700 text-white p-4 flex items-center justify-between">
+                <h3 className="font-semibold text-lg flex items-center">
+                  <span className="text-xl mr-2">📋</span>
+                  Quests
+                </h3>
+                <button 
+                  onClick={handleCardFlip}
+                  className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                >
+                  <RotateCcw className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Sub-Tab Navigation */}
+              <div className="p-4 border-b border-slate-100">
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => setActiveSubTab('today')}
+                    className={getSubTabButtonClass('today')}
+                  >
+                    Today
+                  </button>
+                  <button
+                    onClick={() => setActiveSubTab('weekly')}
+                    className={getSubTabButtonClass('weekly')}
+                  >
+                    Weekly
+                  </button>
+                  <button
+                    onClick={() => setActiveSubTab('seasonal')}
+                    className={getSubTabButtonClass('seasonal')}
+                  >
+                    Seasonal
+                  </button>
+                </div>
+              </div>
+
+              {/* Quest Content */}
+              <div className="p-4 h-full overflow-y-auto pb-20">
+                {renderQuestContent()}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Quest Sub-Tabs */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-slate-800 flex items-center text-lg">
-            <span className="text-xl mr-2">📋</span>
-            Quests
-          </h3>
+      {/* Calendar View - Only show in today tab and when card is flipped */}
+      {activeSubTab === 'today' && !isCardFlipped && (
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            <QuestCalendarView />
+          </div>
         </div>
-        
-        {/* Sub-Tab Navigation - Full Width */}
-        <div className="flex space-x-3">
-          <button
-            onClick={() => setActiveSubTab('today')}
-            className={getSubTabButtonClass('today')}
-          >
-            Today
-          </button>
-          <button
-            onClick={() => setActiveSubTab('weekly')}
-            className={getSubTabButtonClass('weekly')}
-          >
-            Weekly
-          </button>
-          <button
-            onClick={() => setActiveSubTab('seasonal')}
-            className={getSubTabButtonClass('seasonal')}
-          >
-            Seasonal
-          </button>
-        </div>
-
-        {/* Sub-Tab Content */}
-        {renderSubTabContent()}
-      </div>
+      )}
 
       {/* Floating Action Button */}
       <button className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 gentle-hover">
