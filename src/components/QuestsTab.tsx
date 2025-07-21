@@ -189,31 +189,45 @@ export const QuestsTab = () => {
       </div>
 
       {/* Main Flip Card */}
-      <div className="relative h-[600px] perspective-1000">
+      <div className="relative h-[500px] perspective-1000">
         <div 
           className={`absolute inset-0 w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
             isCardFlipped ? 'rotate-y-180' : ''
           }`}
         >
-          {/* Front Side - Today's Verse */}
+          {/* Front Side - Today's Verse with Landscape Background */}
           <div className="absolute inset-0 w-full h-full backface-hidden">
             <div 
-              className="bg-gradient-to-br from-slate-700 via-blue-700 to-indigo-800 rounded-2xl p-8 text-white shadow-xl h-full flex flex-col justify-center items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="relative rounded-2xl shadow-xl h-full overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300"
               onClick={handleCardFlip}
             >
-              <div className="text-center space-y-6">
-                <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
-                  <span className="text-3xl mr-3">✨</span>
-                  Today's Verse
-                </h2>
-                <p className="text-xl leading-relaxed font-serif mb-6 text-blue-50 max-w-md">
-                  "Therefore encourage one another and build each other up, just as in fact you are doing."
-                </p>
-                <p className="text-lg opacity-90 text-blue-200 mb-8">1 Thessalonians 5:11</p>
-                
-                <div className="flex items-center justify-center text-blue-200 animate-soft-pulse">
-                  <RotateCcw className="w-5 h-5 mr-2" />
-                  <span className="text-sm">Tap to view quests</span>
+              {/* Background Image with Blur */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: `url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`
+                }}
+              />
+              
+              {/* Blur Overlay */}
+              <div className="absolute inset-0 backdrop-blur-sm bg-black/30" />
+              
+              {/* Content Overlay */}
+              <div className="relative z-10 h-full flex flex-col justify-center items-center text-white p-8">
+                <div className="text-center space-y-6 max-w-md">
+                  <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
+                    <span className="text-3xl mr-3">✨</span>
+                    Today's Verse
+                  </h2>
+                  <p className="text-xl leading-relaxed font-serif mb-6 text-shadow-lg">
+                    "Therefore encourage one another and build each other up, just as in fact you are doing."
+                  </p>
+                  <p className="text-lg opacity-90 mb-8">1 Thessalonians 5:11</p>
+                  
+                  <div className="flex items-center justify-center text-white/80 animate-soft-pulse">
+                    <RotateCcw className="w-5 h-5 mr-2" />
+                    <span className="text-sm">Tap to view quests</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -238,7 +252,7 @@ export const QuestsTab = () => {
 
               {/* Sub-Tab Navigation */}
               <div className="p-4 border-b border-slate-100">
-                <div className="flex space-x-3">
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     onClick={() => setActiveSubTab('today')}
                     className={getSubTabButtonClass('today')}
@@ -269,11 +283,16 @@ export const QuestsTab = () => {
         </div>
       </div>
 
-      {/* Calendar View - Only show in today tab and when card is flipped */}
+      {/* Calendar View - Only show in today tab and when card is NOT flipped */}
       {activeSubTab === 'today' && !isCardFlipped && (
-        <div className="flex justify-center">
-          <div className="w-full max-w-md">
-            <QuestCalendarView />
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-slate-800 text-center">
+            Your Spiritual Journey
+          </h3>
+          <div className="flex justify-center">
+            <div className="w-full max-w-md">
+              <QuestCalendarView />
+            </div>
           </div>
         </div>
       )}
