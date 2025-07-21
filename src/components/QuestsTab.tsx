@@ -189,7 +189,7 @@ export const QuestsTab = () => {
       </div>
 
       {/* Main Flip Card */}
-      <div className="relative h-[500px] perspective-1000">
+      <div className="relative h-[600px] perspective-1000">
         <div 
           className={`absolute inset-0 w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
             isCardFlipped ? 'rotate-y-180' : ''
@@ -210,7 +210,7 @@ export const QuestsTab = () => {
               />
               
               {/* Blur Overlay */}
-              <div className="absolute inset-0 backdrop-blur-sm bg-black/30" />
+              <div className="absolute inset-0 backdrop-blur-[2px] bg-black/30" />
               
               {/* Content Overlay */}
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-white p-8">
@@ -283,8 +283,8 @@ export const QuestsTab = () => {
         </div>
       </div>
 
-      {/* Calendar View - Only show in today tab and when card is NOT flipped */}
-      {activeSubTab === 'today' && !isCardFlipped && (
+      {/* Calendar View - Only show when card is NOT flipped */}
+      {!isCardFlipped && (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-slate-800 text-center">
             Your Spiritual Journey
